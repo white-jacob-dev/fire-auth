@@ -58,7 +58,7 @@ function App() {
         className="paper"
       >
         <Typography variant="h4" fontWeight={600}>
-          Hello.
+          {user ? 'Welcome, ' + user.email : 'Hello.'}
         </Typography>
         <TextField
           className="textfield"
@@ -119,9 +119,6 @@ function App() {
           Logout
         </Button>
       </Paper>
-      <Typography variant="h4" fontWeight={600}>
-        Welcome, {user?.email}.
-      </Typography>
     </Box>
   );
 }
