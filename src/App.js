@@ -3,7 +3,8 @@ import './App.css';
 import React, { useState } from 'react';
 import { Box, TextField, Paper, Button, Typography, Divider } from '@mui/material';
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { auth } from './firebaseConfig';
+import { db, auth } from './firebaseConfig';
+import { collection, addDoc } from 'firebase/firestore';
 
 function App() {
   const [registerEmail, setRegisterEmail] = useState('');
@@ -11,17 +12,22 @@ function App() {
   const [confirmRegisterPassword, setConfirmRegisterPassword] = useState('');
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
-
   const [user, setUser] = useState({});
+  const usersCollectionRef = collection(db, 'users');
 
   onAuthStateChanged(auth, (currentUser) => {
     setUser(currentUser);
   });
 
+  const createUser = async () => {
+    await addDoc(usersCollectionRef, { email: registerEmail, password: registerPassword });
+  };
+
   const register = async () => {
     try {
       if (registerPassword == confirmRegisterPassword) {
         const user = await createUserWithEmailAndPassword(auth, registerEmail, registerPassword);
+        createUser();
         console.log('User registered successfully.');
       }
     } catch (error) {
@@ -33,6 +39,7 @@ function App() {
     try {
       const user = await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
       console.log('User logged in successfully.');
+      console.log(user);
     } catch (error) {
       console.log(error.message);
     }
@@ -57,7 +64,7 @@ function App() {
         sx={{ width: { xs: '85%', sm: '80%', md: '70%', lg: '50%' }, display: 'flex', flexDirection: 'column', gap: '10px', padding: '3%' }}
         className="paper"
       >
-        <Typography variant="h4" fontWeight={600}>
+        <Typography variant="subtitle2" fontWeight={600}>
           {user ? 'Welcome, ' + user.email : 'Hello.'}
         </Typography>
         <TextField
