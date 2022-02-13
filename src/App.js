@@ -20,7 +20,7 @@ function App() {
   });
 
   const createUser = async () => {
-    await addDoc(usersCollectionRef, { email: registerEmail, password: registerPassword });
+    await addDoc(usersCollectionRef, { email: registerEmail });
   };
 
   const register = async () => {
