@@ -18,4 +18,4 @@ Install the packages and run the project using:
 
 2. npm start
 ```
-    
+Currently being hosted by Netlify here: https://fire-auth-project.netlify.app/
